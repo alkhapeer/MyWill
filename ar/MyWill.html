@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>وصيتي – كلماتك التي تبقى</title>
+    <meta name="description" content="تطبيق شخصي لكتابة وصيتك ورسائلك المهمة وحفظها وتحديثها باستمرار." />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📜</text></svg>" />
+
+    <!-- ===== STYLES ===== -->
+    <style>
+        /* ---------- CSS Variables ---------- */
+        :root {
+            --gold: #c9a84c;
+            --gold-light: #e8d5a3;
+            --gold-pale: #f5efe0;
+            --green: #5a7a6b;
+            --green-light: #8aaa9a;
+            --green-pale: #eef5f0;
+            --cream: #fcf9f4;
+            --white: #ffffff;
+            --gray: #6b6b6b;
+            --gray-light: #d4d4d4;
+            --gray-pale: #f0f0f0;
+            --shadow: rgba(90, 122, 107, 0.15);
+            --radius: 18px;
+            --radius-sm: 10px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-ar: 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+        }
+
+        /* ---------- Reset & Base ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-ar);
+            background: var(--cream);
+            color: #2d3e35;
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 0 20px 40px;
+        }
+
+        /* ---------- Typography ---------- */
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 6vw, 3.4rem);
+            color: #2d3e35;
+        }
+        h2 {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            color: #2d3e35;
+        }
+        h3 {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: #3d5a4a;
+        }
+
+        a {
+            color: var(--green);
+            text-decoration: none;
+        }
+        a:hover {
+            color: var(--gold);
+        }
+
+        /* ---------- Scrollbar ---------- */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--gray-pale);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-light);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+        }
+
+        /* ---------- Utility ---------- */
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 0 12px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+        .text-muted {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        .mt-1 {
+            margin-top: 10px;
+        }
+        .mt-2 {
+            margin-top: 20px;
+        }
+        .mt-3 {
+            margin-top: 32px;
+        }
+        .mb-1 {
+            margin-bottom: 10px;
+        }
+        .mb-2 {
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ---------- Buttons ---------- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font-ar);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--white);
+            color: #2d3e35;
+            box-shadow: 0 2px 12px var(--shadow);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: var(--white);
+        }
+        .btn-primary:hover {
+            background: #4a6a5a;
+            color: var(--white);
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: var(--white);
+        }
+        .btn-gold:hover {
+            background: #b8973a;
+            color: var(--white);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--green);
+            color: var(--green);
+        }
+        .btn-outline:hover {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .btn-sm {
+            padding: 6px 16px;
+            font-size: 0.85rem;
+        }
+        .btn-xs {
+            padding: 4px 12px;
+            font-size: 0.75rem;
+        }
+
+        .btn-danger {
+            background: #c0392b;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #a93226;
+            color: white;
+        }
+
+        /* ---------- Cards ---------- */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            box-shadow: 0 4px 24px var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(201, 168, 76, 0.12);
+        }
+        .card:hover {
+            box-shadow: 0 8px 36px rgba(90, 122, 107, 0.12);
+        }
+
+        .card-gold {
+            border-top: 4px solid var(--gold);
+        }
+        .card-green {
+            border-top: 4px solid var(--green);
+        }
+
+        /* ---------- Animations ---------- */
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp 0.6s ease forwards;
+        }
+        .fade-up-d1 {
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+        .fade-up-d2 {
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+        .fade-up-d3 {
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+
+        /* ---------- Header ---------- */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0 10px;
+            border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .app-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #2d3e35;
+        }
+        .app-header .logo span {
+            color: var(--gold);
+        }
+        .app-header .logo small {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--gray);
+            display: block;
+            margin-top: -4px;
+        }
+        .app-header .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .app-header .nav-links button {
+            background: none;
+            border: none;
+            font-family: var(--font-ar);
+            font-size: 0.95rem;
+            padding: 6px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--gray);
+        }
+        .app-header .nav-links button:hover,
+        .app-header .nav-links button.active {
+            background: var(--gold-pale);
+            color: #2d3e35;
+        }
+        .app-header .nav-links button.active {
+            background: var(--gold);
+            color: white;
+        }
+
+        /* ---------- Home Page ---------- */
+        .hero {
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+        .hero .badge {
+            display: inline-block;
+            background: var(--gold-pale);
+            color: var(--gold);
+            padding: 4px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            letter-spacing: 0.3px;
+        }
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 560px;
+            margin: 12px auto 28px;
+        }
+        .hero .cta-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 18px;
+            margin-top: 32px;
+        }
+        .features-grid .feat-item {
+            background: var(--white);
+            padding: 20px 16px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            border: 1px solid rgba(201, 168, 76, 0.10);
+            transition: var(--transition);
+        }
+        .features-grid .feat-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--gold-light);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+        .features-grid .feat-item .icon {
+            font-size: 2rem;
+            margin-bottom: 6px;
+        }
+        .features-grid .feat-item h4 {
+            font-size: 0.95rem;
+            color: #2d3e35;
+        }
+        .features-grid .feat-item p {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 2px;
+        }
+
+        .legal-notice {
+            margin-top: 40px;
+            padding: 18px 24px;
+            background: var(--gold-pale);
+            border-radius: var(--radius-sm);
+            border-right: 4px solid var(--gold);
+            font-size: 0.9rem;
+            color: #5a4e2a;
+        }
+        .legal-notice strong {
+            color: #7a6530;
+        }
+
+        /* ---------- Editor Page ---------- */
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0 20px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+            align-items: center;
+        }
+        .editor-toolbar .spacer {
+            flex: 1;
+        }
+        .editor-toolbar .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .section-card {
+            margin-bottom: 22px;
+            transition: var(--transition);
+        }
+        .section-card .section-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .section-card .section-header h3 {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-card .section-header .meta {
+            font-size: 0.75rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .section-card .section-header .meta .word-count {
+            background: var(--gray-pale);
+            padding: 0 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+        .section-card textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 14px 16px;
+            border: 1.5px solid rgba(201, 168, 76, 0.20);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-ar);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            resize: vertical;
+            transition: var(--transition);
+            background: var(--white);
+            color: #2d3e35;
+        }
+        .section-card textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.12);
+        }
+        .section-card textarea::placeholder {
+            color: #b0b0b0;
+            font-size: 0.85rem;
+        }
+        .section-card .saved-indicator {
+            font-size: 0.7rem;
+            color: var(--green-light);
+            transition: var(--transition);
+            opacity: 0;
+        }
+        .section-card .saved-indicator.show {
+            opacity: 1;
+        }
+
+        /* ---------- About Page ---------- */
+        .about-content {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .about-content .card {
+            margin-bottom: 20px;
+        }
+        .about-content ul {
+            padding-right: 24px;
+            margin: 8px 0;
+        }
+        .about-content ul li {
+            margin-bottom: 4px;
+            color: #3d5a4a;
+        }
+
+        /* ---------- Modal / Confirm ---------- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.40);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            animation: fadeUp 0.25s ease;
+            padding: 20px;
+        }
+        .modal-overlay .modal-box {
+            background: var(--white);
+            border-radius: var(--radius);
+            max-width: 420px;
+            width: 100%;
+            padding: 32px 28px 28px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.20);
+        }
+        .modal-overlay .modal-box h3 {
+            margin-bottom: 8px;
+        }
+        .modal-overlay .modal-box p {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        .modal-overlay .modal-box .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ---------- Toast ---------- */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3e35;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.20);
+            z-index: 1000;
+            animation: fadeUp 0.3s ease;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 640px) {
+            body {
+                padding: 0 12px 30px;
+            }
+            .app-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .app-header .nav-links {
+                justify-content: center;
+            }
+            .app-header .logo {
+                font-size: 1.3rem;
+                justify-content: center;
+            }
+            .card {
+                padding: 16px 16px;
+            }
+            .editor-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .editor-toolbar .btn-group {
+                justify-content: center;
+            }
+            .section-card .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .hero {
+                padding: 24px 0 10px;
+            }
+            .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+            .modal-overlay .modal-box {
+                padding: 24px 18px 20px;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .app-header .nav-links button {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+            .editor-toolbar .btn-group .btn {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+        }
+
+        /* ---------- Print ---------- */
+        @media print {
+            .app-header .nav-links,
+            .editor-toolbar .btn-group,
+            .editor-toolbar .spacer,
+            .btn-print-hide {
+                display: none !important;
+            }
+            .app-header {
+                border-bottom: 1px solid #ccc;
+            }
+            .section-card textarea {
+                border: 1px solid #ddd;
+                min-height: 80px;
+            }
+            .section-card .section-header .meta .word-count {
+                background: #eee;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            body {
+                background: white;
+                padding: 10px;
+            }
+        }
+
+        /* ---------- Loading shimmer ---------- */
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+            min-height: 60px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TOAST ===== -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ===== APP ===== -->
+    <div id="app" class="container">
+
+        <!-- ===== HEADER ===== -->
+        <header class="app-header">
+            <div class="logo">
+                <span>📜</span>
+                <div>
+                    وصيتي
+                    <small>كلماتك التي تبقى</small>
+                </div>
+            </div>
+            <nav class="nav-links" id="navLinks">
+                <button data-page="home" class="active">الرئيسية</button>
+                <button data-page="editor">وصيتي</button>
+                <button data-page="about">عن التطبيق</button>
+            </nav>
+        </header>
+
+        <!-- ===== PAGE: HOME ===== -->
+        <main id="page-home" class="page">
+            <section class="hero fade-up">
+                <div class="badge">✧ تطبيق شخصي مجاني</div>
+                <h1>اكتب وصيتك اليوم...<br />وحدّثها دائمًا</h1>
+                <p class="subtitle">
+                    مكان آمن لترتيب أفكارك ورسائلك المهمة لمن تحب.
+                    كل شيء محفوظ على جهازك فقط.
+                </p>
+                <div class="cta-group">
+                    <button class="btn btn-primary" id="startWritingBtn">📝 ابدأ كتابة وصيتي</button>
+                    <button class="btn btn-outline" id="aboutFromHomeBtn">ℹ️ عن التطبيق</button>
+                </div>
+            </section>
+            <section class="fade-up fade-up-d1">
+                <div class="features-grid">
+                    <div class="feat-item"><div class="icon">💌</div><h4>رسائل لعائلتك</h4><p>كلمات من القلب</p></div>
+                    <div class="feat-item"><div class="icon">🧠</div><h4>أفكارك المهمة</h4><p>ما تريد تذكره</p></div>
+                    <div class="feat-item"><div class="icon">🌟</div><h4>أمنياتك</h4><p>ما تتمناه لمن تحب</p></div>
+                    <div class="feat-item"><div class="icon">📖</div><h4>الأشياء التي تريد تذكرها</h4><p>ذكريات ودروس</p></div>
+                </div>
+            </section>
+                <h2 class="text-center" style="font-weight:400;font-size:1.4rem;color:var(--gray);">
+                    لماذا تكتب وصيتك؟
+                </h2>
+
+
+                <p class="subtitle"></p>
+                 قال رَسولَ اللهِ صلَّى اللهُ عليه وسلَّم : ما حَقُّ امرِئٍ مُسلِمٍ له شيءٌ يوصي فيه، يَبيتُ لَيلَتَينِ إلَّا ووصيَّتُه مَكتوبةٌ عِندَه.                            
+                </p>
+            <section class="legal-notice fade-up fade-up-d2">
+                <strong>⚠️ تنبيه مهم:</strong>
+                هذا التطبيق أداة شخصية لتنظيم الأفكار والرسائل،
+                <strong>وليس بديلاً عن الإجراءات القانونية الرسمية.</strong>
+                يُنصح بالرجوع إلى محامٍ مختص لكتابة وصية قانونية معتمدة.
+            </section>
+            <p class="subtitle">
+
+                    </p>
+                                                                                صدقة جارية لروح والديَّ
+                    </p>
+                
+        </main>
+
+        <!-- ===== PAGE: EDITOR ===== -->
+        <main id="page-editor" class="page hidden">
+            <div class="editor-toolbar">
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-gold" id="exportPdfBtn">📄 PDF</button>
+                    <button class="btn btn-sm btn-outline" id="printBtn">🖨️ طباعة</button>
+                    <button class="btn btn-sm btn-outline" id="copyAllBtn">📋 نسخ الكل</button>
+                </div>
+                <div class="spacer"></div>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-danger" id="clearAllBtn">🗑️ مسح الكل</button>
+                </div>
+            </div>
+
+            <div id="sectionsContainer">
+                <!-- Sections rendered by JS -->
+            </div>
+
+            <div style="margin-top:20px;text-align:center;font-size:0.8rem;color:var(--gray);border-top:1px solid rgba(201,168,76,0.15);padding-top:16px;">
+                💾 يتم الحفظ تلقائيًا على جهازك &nbsp;·&nbsp; البيانات لا تُرسل إلى أي خادم
+            </div>
+        </main>
+
+        <!-- ===== PAGE: ABOUT ===== -->
+        <main id="page-about" class="page hidden">
+           <div class="about-content fade-up">
+                <h2 style="text-align:center;margin-bottom:8px;">عن التطبيق</h2>
+                <p class="text-center text-muted" style="margin-bottom:24px;">وصيتي – كلماتك التي تبقى</p>
+
+                <div class="card card-gold">
+                    <h3>📜 ما هو تطبيق وصيتي؟</h3>
+                    <p>
+                        تطبيق شخصي يساعدك على كتابة وصيتك ورسائلك المهمة،
+                        وحفظها وتحديثها باستمرار.
+                        كل البيانات تخزن <strong>محليًا على متصفحك</strong> فقط،
+                        ولا تُرسل إلى أي خادم خارجي.
+                    </p>
+                </div>
+
+                <div class="card card-green">
+                    <h3>🔒 الخصوصية والأمان</h3>
+                    <ul>
+                        <li>✅ البيانات محفوظة على جهازك فقط (Local Storage).</li>
+                        <li>✅ لا نستخدم Cookies غير ضرورية.</li>
+                        <li>✅ لا نرسل أي بيانات للخارج.</li>
+                        <li>✅ التطبيق يعمل دون اتصال بعد التحميل الأول.</li>
+                    </ul>
+                  </div> 
+      
+                <div class="card" style="border-top:4px solid var(--green-light);">
+                    <h3>⚖️ تنبيه قانوني</h3>
+                    <p>
+                        <strong>وصيتي</strong> هو أداة تنظيم وتوثيق شخصي فقط.
+                        لا يمثل هذا التطبيق سندًا قانونيًا أو وصية رسمية.
+                        للحصول على وصية معتمدة قانونيًا، يُرجى استشارة محامٍ
+                        أو جهة مختصة وفق قوانين بلدك.
+                    </p>
+                </div>
+                <!--
+                <div class="card" style="border-top:4px solid var(--gold-light);">
+                    <h3>📊 إعدادات التحليلات</h3> 
+                      <p style="font-size:0.9rem;">
+                        يمكنك تفعيل Google Analytics عبر تعديل ملف
+                        <code style="background:#f0f0f0;padding:2px 8px;border-radius:4px;">src/config.js</code>
+                        وإضافة معرف التتبع الخاص بك.
+                    </p> 
+                    <details style="margin-top:8px;font-size:0.85rem;color:var(--gray);">
+                        <summary style="cursor:pointer;color:var(--green);">كيفية الإضافة</summary>
+                        <pre style="background:#f5f5f5;padding:12px;border-radius:8px;overflow:auto;font-size:0.8rem;margin-top:6px;direction:ltr;text-align:left;">
+                            // src/config.js
+                            export const CONFIG = {
+                            GA_ID: 'G-XXXXXXXXXX', // ضع معرفك هنا
+                            APP_NAME: 'وصيتي',
+                            VERSION: '1.0.0'
+                        };
+                    </pre>
+                </details>
+            </div>
+            -->
+
+            <div style="margin-top:20px;text-align:center;font-size:0.8rem;color:var(--gray);">
+                الإصدار 1.0.0 &nbsp;·&nbsp; 🕊️ مصمم بروح إنسانية
+            </div>
+        </div>
+    </main>
+
+</div>
+
+<!-- ===== CONFIRM MODAL ===== -->
+<div id="confirmModal" class="modal-overlay hidden">
+    <div class="modal-box">
+        <h3 id="confirmTitle">تأكيد</h3>
+        <p id="confirmMessage">هل أنت متأكد؟</p>
+        <div class="actions">
+            <button class="btn btn-sm btn-outline" id="confirmCancelBtn">إلغاء</button>
+            <button class="btn btn-sm btn-danger" id="confirmOkBtn">تأكيد</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script type="module">
+    // ============================================================
+    //  CONFIG
+    // ============================================================
+    const CONFIG = {
+        GA_ID: 'YOUR_GOOGLE_ANALYTICS_ID', // ← ضع معرف GA4 هنا
+        APP_NAME: 'وصيتي',
+        VERSION: '1.0.0',
+    };
+
+    // ============================================================
+    //  ANALYTICS (safe stub)
+    // ============================================================
+    const Analytics = {
+        init() {
+            if (CONFIG.GA_ID && CONFIG.GA_ID !== 'YOUR_GOOGLE_ANALYTICS_ID') {
+                // Load GA4 script
+                const script = document.createElement('script');
+                script.async = true;
+                script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.GA_ID}`;
+                document.head.appendChild(script);
+
+                window.dataLayer = window.dataLayer || [];
+                window.gtag = function() { window.dataLayer.push(arguments); };
+                window.gtag('js', new Date());
+                window.gtag('config', CONFIG.GA_ID);
+                console.log('📊 Google Analytics initialized');
+                return true;
+            }
+            console.log('📊 GA not configured (set GA_ID in config)');
+            return false;
+        },
+        event(name, params = {}) {
+            if (window.gtag) {
+                window.gtag('event', name, params);
+            }
+        }
+    };
+
+    // ============================================================
+    //  STORAGE
+    // ============================================================
+    const Storage = {
+        KEY: 'wasiyati_data',
+
+        load() {
+            try {
+                const raw = localStorage.getItem(this.KEY);
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    // Ensure all sections exist
+                    const sections = getSectionDefinitions();
+                    sections.forEach(s => {
+                        if (!(s.id in data)) data[s.id] = '';
+                    });
+                    return data;
+                }
+            } catch (_) { /* ignore */ }
+            return this.getDefault();
+        },
+
+        save(data) {
+            try {
+                localStorage.setItem(this.KEY, JSON.stringify(data));
+                return true;
+            } catch (_) { return false; }
+        },
+
+        getDefault() {
+            const obj = {};
+            getSectionDefinitions().forEach(s => { obj[s.id] = ''; });
+            return obj;
+        },
+
+        clear() {
+            localStorage.removeItem(this.KEY);
+        },
+
+        getLastModified() {
+            try {
+                const raw = localStorage.getItem(this.KEY + '_meta');
+                if (raw) return JSON.parse(raw);
+            } catch (_) { /* ignore */ }
+            return {};
+        },
+
+        setLastModified(sectionId) {
+            const meta = this.getLastModified();
+            meta[sectionId] = Date.now();
+            try {
+                localStorage.setItem(this.KEY + '_meta', JSON.stringify(meta));
+            } catch (_) { /* ignore */ }
+        },
+
+        getLastModifiedTime(sectionId) {
+            const meta = this.getLastModified();
+            const ts = meta[sectionId];
+            if (ts) {
+                const d = new Date(ts);
+                return d.toLocaleString('ar-SA', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+            return '—';
+        }
+    };
+
+    // ============================================================
+    //  SECTION DEFINITIONS
+    // ============================================================
+    function getSectionDefinitions() {
+        return [
+            { id: 'personal', label: '📝 وصيتي الشخصية', placeholder: 'اكتب وصيتك الشخصية هنا...' },
+            { id: 'family', label: '💌 رسالتي لعائلتي', placeholder: 'اكتب رسالتك لعائلتك...' },
+            { id: 'children', label: '👶 رسالتي للأبناء', placeholder: 'اكتب رسالتك لأبنائك...' },
+            { id: 'important', label: '⭐ أشيائي المهمة', placeholder: 'اذكر الأشياء المهمة التي تريد تذكرها...' },
+            { id: 'notes', label: '📓 ملاحظات خاصة', placeholder: 'أضف ملاحظاتك الخاصة...' },
+            { id: 'emergency', label: '🚨 معلومات الطوارئ', placeholder: 'معلومات مهمة للحالات الطارئة...' },
+            { id: 'debts', label: '💰 ديوني والتزاماتي', placeholder: 'سجل ديونك والتزاماتك...' },
+            { id: 'properties', label: '🏠 ممتلكاتي', placeholder: 'قائمة ممتلكاتك...' },
+            { id: 'inheritance', label: '📜 ميراثي', placeholder: 'تفاصيل الميراث...' },
+            { id: 'gifts', label: '🎁 الهبات والعطايا', placeholder: 'الهبات والعطايا التي تريد تقديمها...' },
+            { id: 'endowments', label: '🕌 الوقف والصدقات الجارية', placeholder: 'الوقف والصدقات الجارية...' },
+            { id: 'trusted', label: '🤝 الأشخاص الموثوقون', placeholder: 'أسماء الأشخاص الموثوقين...' },
+            { id: 'final', label: '🕊️ رسالتي الأخيرة', placeholder: 'رسالتك الأخيرة...' },
+        ];
+    }
+
+    // ============================================================
+    //  HELPERS
+    // ============================================================
+    function wordCount(text) {
+        const cleaned = text.trim();
+        if (!cleaned) return 0;
+        return cleaned.split(/\s+/).length;
+    }
+
+    function showToast(msg, duration = 2800) {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(el._timer);
+        el._timer = setTimeout(() => el.classList.remove('show'), duration);
+    }
+
+    function showConfirm(title, message) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('confirmModal');
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            modal.classList.remove('hidden');
+
+            const cleanup = () => {
+                modal.classList.add('hidden');
+                document.getElementById('confirmOkBtn').onclick = null;
+                document.getElementById('confirmCancelBtn').onclick = null;
+            };
+
+            document.getElementById('confirmOkBtn').onclick = () => { cleanup();
+                resolve(true); };
+            document.getElementById('confirmCancelBtn').onclick = () => { cleanup();
+                resolve(false); };
+        });
+    }
+
+    function formatDate(ts) {
+        if (!ts) return '—';
+        const d = new Date(ts);
+        return d.toLocaleString('ar-SA', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    // ============================================================
+    //  APP STATE
+    // ============================================================
+    let appData = Storage.load();
+    const sections = getSectionDefinitions();
+    let currentPage = 'home';
+
+    // ============================================================
+    //  RENDER
+    // ============================================================
+    function renderSections() {
+        const container = document.getElementById('sectionsContainer');
+        container.innerHTML = '';
+
+        sections.forEach((sec, index) => {
+            const value = appData[sec.id] || '';
+            const wc = wordCount(value);
+            const lastMod = Storage.getLastModifiedTime(sec.id);
+
+            const card = document.createElement('div');
+            card.className = 'card section-card fade-up';
+            card.style.animationDelay = `${(index % 6) * 0.04}s`;
+            card.dataset.sectionId = sec.id;
+
+            card.innerHTML = `
+                <div class="section-header">
+                    <h3>${sec.label}</h3>
+                    <div class="meta">
+                        <span class="word-count">${wc} كلمة</span>
+                        <span>🕒 ${lastMod}</span>
+                        <span class="saved-indicator" id="indicator-${sec.id}">✓ حُفظ</span>
+                    </div>
+                </div>
+                <textarea id="ta-${sec.id}" placeholder="${sec.placeholder}" rows="4">${value}</textarea>
+            `;
+
+            container.appendChild(card);
+
+            // --- Auto-save on input ---
+            const ta = card.querySelector('textarea');
+            const indicator = card.querySelector('.saved-indicator');
+
+            let saveTimer = null;
+            ta.addEventListener('input', () => {
+                const val = ta.value;
+                appData[sec.id] = val;
+                // Update word count
+                const wcEl = card.querySelector('.word-count');
+                if (wcEl) wcEl.textContent = `${wordCount(val)} كلمة`;
+
+                // Show indicator
+                indicator.classList.add('show');
+                clearTimeout(indicator._hideTimer);
+                indicator._hideTimer = setTimeout(() => indicator.classList.remove('show'), 1200);
+
+                // Save with debounce
+                clearTimeout(saveTimer);
+                saveTimer = setTimeout(() => {
+                    Storage.save(appData);
+                    Storage.setLastModified(sec.id);
+                    // Update timestamp
+                    const metaEl = card.querySelector('.meta span:not(.word-count):not(.saved-indicator)');
+                    if (metaEl) metaEl.textContent = `🕒 ${Storage.getLastModifiedTime(sec.id)}`;
+                    // Trigger analytics
+                    Analytics.event('auto_save', { section: sec.id });
+                }, 400);
+            });
+
+            // --- Focus tracking ---
+            ta.addEventListener('focus', () => {
+                Analytics.event('section_focus', { section: sec.id });
+            });
+        });
+    }
+
+    function navigateTo(page) {
+        currentPage = page;
+
+        // Update nav buttons
+        document.querySelectorAll('#navLinks button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.page === page);
+        });
+
+        // Show/hide pages
+        document.querySelectorAll('.page').forEach(el => el.classList.add('hidden'));
+        const target = document.getElementById(`page-${page}`);
+        if (target) target.classList.remove('hidden');
+
+        // Re-trigger animations
+        target.querySelectorAll('.fade-up').forEach(el => {
+            el.style.animation = 'none';
+            requestAnimationFrame(() => {
+                el.style.animation = '';
+            });
+        });
+
+        // Analytics
+        Analytics.event('page_view', { page });
+
+        if (page === 'editor') {
+            // Re-render sections to reflect latest data
+            appData = Storage.load();
+            renderSections();
+        }
+    }
+
+    // ============================================================
+    //  ACTIONS
+    // ============================================================
+    async function handleClearAll() {
+        const confirmed = await showConfirm(
+            '⚠️ مسح جميع البيانات',
+            'هل أنت متأكد؟ سيتم حذف كل ما كتبته نهائيًا.'
+        );
+        if (!confirmed) return;
+
+        Storage.clear();
+        appData = Storage.getDefault();
+        renderSections();
+        showToast('🗑️ تم مسح جميع البيانات');
+        Analytics.event('clear_all_data');
+    }
+
+    function handleCopyAll() {
+        let text = '';
+        sections.forEach(sec => {
+            const val = appData[sec.id] || '';
+            if (val.trim()) {
+                text += `\n${sec.label}\n${'─'.repeat(20)}\n${val}\n\n`;
+            }
+        });
+        if (!text.trim()) {
+            showToast('📭 لا يوجد نص لنسخه');
+            return;
+        }
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('📋 تم نسخ النص بالكامل');
+            Analytics.event('copy_all');
+        }).catch(() => {
+            // Fallback
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+            showToast('📋 تم نسخ النص بالكامل');
+            Analytics.event('copy_all');
+        });
+    }
+
+    function handlePrint() {
+        window.print();
+        Analytics.event('print');
+    }
+
+    function handleExportPdf() {
+        // Build content
+        let content = `<h1 style="text-align:center;color:#2d3e35;">📜 وصيتي</h1>
+                       <p style="text-align:center;color:#6b6b6b;margin-bottom:24px;">${new Date().toLocaleDateString('ar-SA')}</p>`;
+        sections.forEach(sec => {
+            const val = appData[sec.id] || '';
+            if (val.trim()) {
+                content += `<h3 style="color:#5a7a6b;margin-top:18px;border-bottom:1px solid #e8d5a3;padding-bottom:4px;">${sec.label}</h3>
+                            <p style="white-space:pre-wrap;line-height:1.8;font-size:0.95rem;">${val}</p>`;
+            }
+        });
+        if (content ===
+            `<h1 style="text-align:center;color:#2d3e35;">📜 وصيتي</h1><p style="text-align:center;color:#6b6b6b;margin-bottom:24px;">${new Date().toLocaleDateString('ar-SA')}</p>`
+            ) {
+            showToast('📭 لا يوجد محتوى لتصديره');
+            return;
+        }
+
+        // Open print-friendly window
+        const win = window.open('', '_blank', 'width=800,height=600');
+        if (!win) {
+            showToast('⚠️ يُرجى السماح بالنوافذ المنبثقة');
+            return;
+        }
+        win.document.write(`
+            <html dir="rtl">
+            <head><meta charset="UTF-8"><title>وصيتي - PDF</title>
+            <style>
+                body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; padding:40px; max-width:700px; margin:auto; background:white; color:#2d3e35; line-height:1.8; }
+                h1 { color:#2d3e35; text-align:center; }
+                h3 { color:#5a7a6b; border-bottom:1px solid #e8d5a3; padding-bottom:4px; margin-top:20px; }
+                p { white-space:pre-wrap; }
+                .footer { text-align:center; color:#999; margin-top:40px; font-size:0.8rem; border-top:1px solid #eee; padding-top:16px; }
+    </style>
+</head>
+<body>
+    ${content}
+    <div class="footer">🕊️ تم إنشاؤه بواسطة تطبيق وصيتي — كلماتك التي تبقى</div>
+</body></html>
+`);
+win.document.close();
+setTimeout(() => { win.print(); }, 500);
+Analytics.event('export_pdf');
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+function init() {
+// Analytics
+Analytics.init();
+Analytics.event('app_open');
+
+// Render initial sections (hidden until navigated)
+renderSections();
+
+// --- Navigation ---
+document.querySelectorAll('#navLinks button').forEach(btn => {
+btn.addEventListener('click', () => {
+navigateTo(btn.dataset.page);
+});
+});
+
+// --- Home CTA ---
+document.getElementById('startWritingBtn').addEventListener('click', () => {
+Analytics.event('start_writing_click');
+navigateTo('editor');
+});
+document.getElementById('aboutFromHomeBtn').addEventListener('click', () => {
+navigateTo('about');
+});
+
+// --- Editor actions ---
+document.getElementById('clearAllBtn').addEventListener('click', handleClearAll);
+document.getElementById('copyAllBtn').addEventListener('click', handleCopyAll);
+document.getElementById('printBtn').addEventListener('click', handlePrint);
+document.getElementById('exportPdfBtn').addEventListener('click', handleExportPdf);
+
+// --- Keyboard shortcuts ---
+document.addEventListener('keydown', (e) => {
+// Ctrl+S to save (just a toast feedback)
+if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+e.preventDefault();
+Storage.save(appData);
+showToast('💾 تم الحفظ');
+Analytics.event('manual_save');
+}
+});
+
+// --- Show home by default ---
+navigateTo('home');
+
+console.log(`🕊️ ${CONFIG.APP_NAME} v${CONFIG.VERSION} loaded`);
+console.log('📦 البيانات مخزنة في Local Storage');
+}
+
+// Run when DOM ready
+if (document.readyState === 'loading') {
+document.addEventListener('DOMContentLoaded', init);
+} else {
+init();
+}
+</script>
+
+</body>
+</html>
