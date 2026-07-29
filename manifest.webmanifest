@@ -1,6 +1,6 @@
 {
-  "name": "Hero App",
-  "short_name": "Hero",
+  "name": "MyWill وصيتي",
+  "short_name": "وصيتي",
   "description": "Hero Progressive Web App",
   "start_url": "./",
   "scope": "./",
